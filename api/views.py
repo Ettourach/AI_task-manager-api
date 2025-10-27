@@ -1,5 +1,6 @@
+from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Task
@@ -13,12 +14,11 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-# Home view — for root URL
-def home(request):
-    return HttpResponse("Welcome to AI Task Manager API!")
+# basic HTML frontend with a simple form to add/view tasks via API
+def index(request):
+    return render(request, 'index.html')
 
-
-# Task ViewSet
+#  Task ViewSet — handles CRUD operations for Task model
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -27,11 +27,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             serializer.save(user=self.request.user)
         else:
-            serializer.save()  # allow task creation without a user
+            serializer.save()  # Allow anonymous task creation (optional)
 
 
-
-#  AI Task Suggestion Endpoint
+# AI Task Suggestion Endpoint
 @api_view(['POST'])
 def suggest_task(request):
     """
@@ -40,12 +39,16 @@ def suggest_task(request):
     """
     try:
         prompt = request.data.get('prompt', 'Suggest a productive daily task.')
-        response = openai.completions.create(
+
+        # Using the correct OpenAI API method for gpt-3.5-turbo-instruct
+        response = openai.Completion.create(
             model="gpt-3.5-turbo-instruct",
             prompt=prompt,
             max_tokens=60
         )
+
         suggestion = response.choices[0].text.strip()
         return Response({'suggestion': suggestion})
+
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

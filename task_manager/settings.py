@@ -8,17 +8,17 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 
-# Load environment variables from .env file
+# --- Load environment variables ---
 load_dotenv()
 
 # --- BASE DIRECTORY ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- SECURITY SETTINGS ---
-SECRET_KEY = os.getenv("qghbky--!#x08*w%xz15wjh#@!6x!(^yt^+o8vx9@=9ft9r4w^")
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-# Set allowed hosts for production
+# --- ALLOWED HOSTS ---
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 # --- APPLICATIONS ---
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
 # --- MIDDLEWARE ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -45,16 +45,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# --- ROOT URL ---
 ROOT_URLCONF = 'task_manager.urls'
 
 # --- TEMPLATES ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -63,10 +65,11 @@ TEMPLATES = [
     },
 ]
 
+
+# --- WSGI APPLICATION ---
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # --- DATABASE CONFIGURATION ---
-# Default: SQLite (development)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -74,8 +77,7 @@ DATABASES = {
     }
 }
 
-# For production: PostgreSQL via DATABASE_URL
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
 
@@ -103,10 +105,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --- REST FRAMEWORK SETTINGS ---
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 # --- OPENAI CONFIG ---
