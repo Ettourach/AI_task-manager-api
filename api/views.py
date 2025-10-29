@@ -34,21 +34,21 @@ class TaskViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def suggest_task(request):
     """
-    AI endpoint: Suggest a task description using OpenAI API.
-    Example POST body: {"prompt": "Suggest a study task"}
-    """
+        AI endpoint: Suggest a task idea based on a given prompt.
+        Example POST body: {"prompt": "study Python"}
+        """
     try:
-        prompt = request.data.get('prompt', 'Suggest a productive daily task.')
+        prompt = request.data.get('prompt', '')
+        openai.api_key = os.getenv('OPENAI_API_KEY')
 
-        # Using the correct OpenAI API method for gpt-3.5-turbo-instruct
         response = openai.Completion.create(
             model="gpt-3.5-turbo-instruct",
-            prompt=prompt,
-            max_tokens=60
+            prompt=f"Suggest a task idea related to: {prompt}",
+            max_tokens=30
         )
 
         suggestion = response.choices[0].text.strip()
-        return Response({'suggestion': suggestion})
+        return Response({"suggestion": suggestion})
 
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": str(e)}, status=400)
