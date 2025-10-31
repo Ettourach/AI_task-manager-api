@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework import viewsets, status
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Task
@@ -14,12 +15,56 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-# basic HTML frontend with a simple form to add/view tasks via API
-def index(request):
-    return render(request, 'index.html')
+# --------------------------
+# User Authentication Views
+# --------------------------
 
-#  Task ViewSet — handles CRUD operations for Task model
+def signup(request):
+    """Handle user signup with Django’s built-in form."""
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")  # redirect to login page
+    else:
+        form = UserCreationForm()
+    return render(request, "registration/signup.html", {"form": form})
+
+
+def login_view(request):
+    """Custom login view."""
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect("index")  # redirect to home page
+    else:
+        form = AuthenticationForm()
+    return render(request, "registration/login.html", {"form": form})
+
+
+def logout_view(request):
+    """Logout user and redirect to login page."""
+    logout(request)
+    return redirect("login")
+
+
+# --------------------------
+# Frontend Home Page
+# --------------------------
+
+def index(request):
+    """Basic frontend page."""
+    return render(request, "index.html")
+
+
+# --------------------------
+# Task CRUD API
+# --------------------------
+
 class TaskViewSet(viewsets.ModelViewSet):
+    """CRUD operations for Task model."""
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
@@ -27,24 +72,25 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             serializer.save(user=self.request.user)
         else:
-            serializer.save()  # Allow anonymous task creation (optional)
+            serializer.save()  # optional: allow anonymous tasks
 
 
-# AI Task Suggestion Endpoint
-@api_view(['POST'])
+# --------------------------
+# AI Task Suggestion API
+# --------------------------
+
+@api_view(["POST"])
 def suggest_task(request):
     """
-        AI endpoint: Suggest a task idea based on a given prompt.
-        Example POST body: {"prompt": "study Python"}
-        """
+    AI endpoint: Suggest a task idea based on a given prompt.
+    Example POST body: {"prompt": "study Python"}
+    """
     try:
-        prompt = request.data.get('prompt', '')
-        openai.api_key = os.getenv('OPENAI_API_KEY')
-
+        prompt = request.data.get("prompt", "")
         response = openai.Completion.create(
             model="gpt-3.5-turbo-instruct",
             prompt=f"Suggest a task idea related to: {prompt}",
-            max_tokens=30
+            max_tokens=30,
         )
 
         suggestion = response.choices[0].text.strip()
