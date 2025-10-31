@@ -66,6 +66,9 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_REDIRECT_URL = '/'  # after login, redirect to home
+LOGOUT_REDIRECT_URL = '/docs/'  # after logout, back to swagger docs
+
 
 # --- WSGI APPLICATION ---
 WSGI_APPLICATION = 'task_manager.wsgi.application'
