@@ -4,9 +4,10 @@ from .models import Task
 
 class TaskTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpass')
-        Task.objects.create(title="Test Task", owner=self.user)
+        self.user = User.objects.create_user(username="testuser", password="password")
+        Task.objects.create(title="Test Task", user=self.user)
 
     def test_task_creation(self):
         task = Task.objects.get(title="Test Task")
-        self.assertEqual(task.owner.username, "testuser")
+        self.assertEqual(task.user.username, "testuser")
+        self.assertFalse(task.completed)

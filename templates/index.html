@@ -51,9 +51,36 @@
       border-left: 5px solid #0066cc;
       border-radius: 8px;
     }
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    nav a, nav button {
+      margin-left: 10px;
+      color: #0066cc;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
   </style>
 </head>
 <body>
+
+  <nav>
+    {% if user.is_authenticated %}
+      <!-- Secure Logout Form -->
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+  </nav>
 
   <h1>🧠 AI Ilyas Task Manager</h1>
 
@@ -99,7 +126,6 @@
       fetchTasks();
     });
 
-    // Load tasks on page load
     fetchTasks();
   </script>
 
