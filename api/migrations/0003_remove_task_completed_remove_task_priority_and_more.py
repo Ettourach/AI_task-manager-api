@@ -8,32 +8,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0002_alter_task_user'),
+        ("api", "0002_alter_task_user"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='task',
-            name='completed',
+            model_name="task",
+            name="completed",
         ),
         migrations.RemoveField(
-            model_name='task',
-            name='priority',
+            model_name="task",
+            name="priority",
         ),
         migrations.RemoveField(
-            model_name='task',
-            name='updated_at',
+            model_name="task",
+            name="updated_at",
         ),
         migrations.AddField(
-            model_name='task',
-            name='status',
-            field=models.CharField(default='Pending', max_length=20),
+            model_name="task",
+            name="status",
+            field=models.CharField(default="Pending", max_length=20),
         ),
         migrations.AlterField(
-            model_name='task',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="task",
+            name="user",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
     ]
