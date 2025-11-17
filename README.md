@@ -36,7 +36,12 @@ A **modern backend project** built with **Django REST Framework**, featuring JWT
     - Improved authentication and permissions
     - Enhanced test coverage (7 tests)
     - Applied Black code formatting
-    - Added environment validation command  
+    - Added environment validation command
+    - **Ready for production deployment** 🚀
+      - Deployment guides for Heroku, Railway, Docker, AWS, VPS
+      - Production-ready Dockerfile and docker-compose.yml
+      - Heroku Procfile and runtime.txt
+      - Nginx configuration for reverse proxy  
 
 ---
 
@@ -136,6 +141,42 @@ curl -X POST http://127.0.0.1:8000/api/suggest-task/ \
 - Use `python manage.py check_env` to validate your environment configuration
 - All links above are local URLs, accessible when the server runs
 - The AI suggestion endpoint requires authentication (JWT token)
+
+---
+
+## 🚀 Deployment
+
+This application is **production-ready** and can be deployed to various platforms:
+
+### Quick Deploy Options
+
+- **Heroku**: `git push heroku main` (see [DEPLOYMENT.md](DEPLOYMENT.md))
+- **Railway**: One-click deploy from GitHub
+- **Docker**: `docker-compose up -d` 
+- **Digital Ocean**: App Platform auto-deploy
+- **AWS**: Elastic Beanstalk or ECS
+- **VPS**: Traditional server deployment with Nginx
+
+📖 **Full deployment guide**: See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions for each platform.
+
+### Deployment Files Included
+
+- ✅ `Procfile` - Heroku/Railway deployment
+- ✅ `runtime.txt` - Python version specification
+- ✅ `Dockerfile` - Production-ready container image
+- ✅ `docker-compose.yml` - Multi-container orchestration
+- ✅ `nginx.conf` - Reverse proxy configuration
+- ✅ `.dockerignore` - Optimized Docker builds
+
+### Pre-Deployment Checklist
+
+```bash
+python manage.py check --deploy  # Check deployment readiness
+python manage.py test            # Run all tests
+python manage.py collectstatic   # Collect static files
+```
+
+---
 
 This project is actively maintained, with recent comprehensive refactoring to improve code quality, security, and maintainability.
 
