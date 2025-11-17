@@ -75,11 +75,9 @@ venv\Scripts\activate      # Windows
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file with your environment variables
-echo SECRET_KEY='your_secret_key' >> .env
-echo DEBUG=True >> .env
-echo ALLOWED_HOSTS='127.0.0.1,localhost' >> .env
-echo OPENAI_API_KEY='your_openai_api_key' >> .env
+# Copy environment template and configure
+cp .env.development .env
+# Edit .env and add your settings (especially OPENAI_API_KEY if you want AI features)
 
 # Check environment configuration (optional but recommended)
 python manage.py check_env
