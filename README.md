@@ -28,7 +28,15 @@ A **modern backend project** built with **Django REST Framework**, featuring JWT
   - Added **AI task suggestion improvements**  
   - Refactored `views.py` for clarity and stability  
   - Added proper **signup/login integration**  
-  - Updated **API endpoints table** for clarity  
+  - Updated **API endpoints table** for clarity
+  - **LATEST**: Complete code refactoring with improved quality
+    - Fixed duplicate model fields (user/owner)
+    - Updated to modern OpenAI ChatCompletion API
+    - Added comprehensive error handling and logging
+    - Improved authentication and permissions
+    - Enhanced test coverage (7 tests)
+    - Applied Black code formatting
+    - Added environment validation command  
 
 ---
 
@@ -73,49 +81,68 @@ echo DEBUG=True >> .env
 echo ALLOWED_HOSTS='127.0.0.1,localhost' >> .env
 echo OPENAI_API_KEY='your_openai_api_key' >> .env
 
+# Check environment configuration (optional but recommended)
+python manage.py check_env
+
 # Run migrations
 python manage.py makemigrations
 python manage.py migrate
 
+# Create a superuser (for admin access)
+python manage.py createsuperuser
+
 # Start the server
 python manage.py runserver
-🤖 AI Task Suggestion Example
-bash
+```
+
+---
+
+## 🤖 AI Task Suggestion Example
+
+```bash
 curl -X POST http://127.0.0.1:8000/api/suggest-task/ \
 -H "Content-Type: application/json" \
+-H "Authorization: Bearer <your-jwt-token>" \
 -d '{"prompt":"study Django"}'
-Response Example:
+```
 
-json
+**Response Example:**
+
+```json
 {
   "suggestion": "Review Django models and build a small CRUD project."
 }
-🛠 Tech Stack
-Backend: Django 5.2, Django REST Framework
+```
 
-Authentication: JWT (Simple JWT)
+---
 
-AI: OpenAI GPT-3.5
+## 🛠 Tech Stack
 
-Docs: drf-yasg (Swagger & ReDoc)
+**Backend:** Django 5.2, Django REST Framework
 
-Database: SQLite (default, can switch to PostgreSQL)
+**Authentication:** JWT (Simple JWT)
 
-📌 Notes
-Make sure OPENAI_API_KEY is set in .env to use the AI endpoint.
+**AI:** OpenAI GPT-3.5
 
-All links above are local URLs, accessible when the server runs.
+**Docs:** drf-yasg (Swagger & ReDoc)
 
-This project is actively maintained, with recent improvements to views.py, AI suggestions, and authentication pages.
+**Database:** SQLite (default, can switch to PostgreSQL)
 
-📄 License
+**Code Quality:** Black, isort
+
+---
+
+## 📌 Notes
+
+- Make sure `OPENAI_API_KEY` is set in `.env` to use the AI endpoint
+- Use `python manage.py check_env` to validate your environment configuration
+- All links above are local URLs, accessible when the server runs
+- The AI suggestion endpoint requires authentication (JWT token)
+
+This project is actively maintained, with recent comprehensive refactoring to improve code quality, security, and maintainability.
+
+---
+
+## 📄 License
+
 This project is licensed under the MIT License.
-
-markdown
-
-✅ Key Improvements I added:  
-1. Grouped **badges in a table** for clarity.  
-2. Added **recent modifications** for version tracking.  
-3. Cleaned Markdown formatting so it renders perfectly in GitHub/PyCharm.  
-4. Made sections **structured and easy to read**.  
-5. Added clear **Notes** about AI keys and local URLs.
