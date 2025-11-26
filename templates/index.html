@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Ilyas Task Manager</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,10 +12,29 @@
       color: #333;
       padding: 20px;
     }
+
+    /* --- TOP RIGHT LOGOUT BUTTON --- */
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff4d4d;
+      padding: 10px 16px;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .logout-btn:hover {
+      background: #cc0000;
+    }
+
     h1 {
       text-align: center;
       color: #0066cc;
     }
+
     form {
       background: white;
       padding: 20px;
@@ -23,6 +43,7 @@
       margin: 20px auto;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
     input, button, textarea {
       width: 100%;
       padding: 10px;
@@ -30,6 +51,7 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
+
     button {
       background-color: #0066cc;
       color: white;
@@ -40,6 +62,7 @@
     button:hover {
       background-color: #004999;
     }
+
     .tasks {
       max-width: 600px;
       margin: 20px auto;
@@ -54,6 +77,9 @@
   </style>
 </head>
 <body>
+
+  <!-- LOGOUT BUTTON -->
+  <a href="/accounts/logout/" class="logout-btn">Logout</a>
 
   <h1>🧠 AI Ilyas Task Manager</h1>
 
@@ -99,7 +125,6 @@
       fetchTasks();
     });
 
-    // Load tasks on page load
     fetchTasks();
   </script>
 
