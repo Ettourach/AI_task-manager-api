@@ -43,7 +43,7 @@ class Task(models.Model):
     def save(self, *args, **kwargs):
         # If completed status changed to True, set completed_at
         if self.pk:
-            old_task = Task.objects.filter(pk=self.pk).first()
+            old_task = Task.objects.filter(pk=self.pk).only('completed').first()
             if old_task and not old_task.completed and self.completed:
                 self.completed_at = timezone.now()
             elif old_task and old_task.completed and not self.completed:
