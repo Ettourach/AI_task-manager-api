@@ -1,0 +1,20 @@
+/* Styles for auth pages (login/signup) - lightweight and focused */
+:root{
+  --brand-primary:#4e73df;
+  --brand-accent:#1cc88a;
+  --muted:#6c757d;
+}
+body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif}
+.card-auth{border-radius:12px}
+.social-btn{background:#fff;color:#111;padding:.5rem .75rem;border-radius:8px;border:1px solid #eef3fb;box-shadow:0 2px 6px rgba(16,24,40,0.04)}
+.social-btn img{height:18px;width:18px}
+.auth-left{background:linear-gradient(180deg,var(--brand-primary),var(--brand-accent));color:#fff}
+.divider span{height:1px;background:#eef3fb;display:block}
+.btn-primary{background:var(--brand-primary);border-color:var(--brand-primary)}
+.btn-primary:hover{background:#375acb;border-color:#375acb}
+/* responsive tweaks */
+@media (max-width:767px){
+  .card-auth{max-width:100%;}
+  .auth-left{display:none}
+}
+

@@ -1,0 +1,3 @@
+web: gunicorn AI_task_manager.wsgi --log-file -
+worker: celery -A AI_task_manager worker --loglevel=info
+beat: celery -A AI_task_manager beat --loglevel=info
